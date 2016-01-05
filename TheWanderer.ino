@@ -107,7 +107,9 @@ void loop()
       samples++;
 
 
-
+      // once we have more than 30 samples, check that the distance 
+      // is shrinking more than it is growing. Note, if the room is large
+      // this could trigger before Sparki reaches objects.
       if ((samples > 30) && (moving <= (samples / 2)))
       {
         sparki.println("I think I'm stuck! - finding another path");
