@@ -1,5 +1,5 @@
 // Wander around room... stop and find a new path if obstacle detected in front
-//   of Sparki. Also, find new path if distance reading doesn't appear to be 
+//   of Sparki. Also, find new path if distance reading doesn't appear to be
 //   shrinking as expected.
 //
 //   Brent Petit, 2016
@@ -26,7 +26,7 @@ void find_next_path(int step_degrees)
   int best_distance = 0;  // Reset the best
   int best_angle = 0;
   int distance;
-  long int delay_time = 2500;
+  long int delay_time = 900;
 
   // Input must be between 1 and 180
   if (step_degrees < 1 || step_degrees > 180)
@@ -34,19 +34,20 @@ void find_next_path(int step_degrees)
     sparki.print("ERROR: step_degrees invalid - defaulting to 45");
     step_degrees = 45;
   }
-  
+
   delay_time = (delay_time * step_degrees) / 180;
 
   sparki.print("delay_time: ");
   sparki.println(delay_time);
   sparki.updateLCD(); // put the drawings on the screen
 
-  // start at 90 degrees left and check each step_degrees for 
+  // start at 90 degrees left and check each step_degrees for
   // the best path
   for (int angle = -90; angle <= 90; angle += step_degrees) {
-    
+
     sparki.servo(angle); // rotate the servo to next postion
-    delay(delay_time); // wait for servo to position
+    delay(100);        // Overhead
+    delay(delay_time); // wait for servo movement
 
     // measures the distance with Sparki's eyes
     // and keep this angle if it's the best
@@ -117,7 +118,7 @@ void loop()
       samples++;
 
 
-      // once we have more than 30 samples, check that the distance 
+      // once we have more than 30 samples, check that the distance
       // is shrinking more than it is growing. Note, if the room is large
       // this could trigger before Sparki reaches objects.
       if ((samples > 30) && (moving <= (samples / 2)))
