@@ -9,6 +9,8 @@
 #define NO_ACCEL   // disables the Accelerometer, frees up 598 Bytes Flash Memory
 #define NO_MAG     // disables the Magnetometer, frees up 2500 Bytes Flash Memory
 
+#define RGB_VIOLET  60, 0, 100
+
 int min_distance = 20; // distance at which another path will be chosen
 int samples = 0;       // samples for change in proximity
 int moving = 0;        // indicator of change in proximity
@@ -24,6 +26,7 @@ void find_next_path(int step_degrees)
   int best_distance = 0;  // Reset the best
   int best_angle = 0;
   int distance;
+  long int delay_time = 2500;
 
   // Input must be between 1 and 180
   if (step_degrees < 1 || step_degrees > 180)
@@ -31,12 +34,19 @@ void find_next_path(int step_degrees)
     sparki.print("ERROR: step_degrees invalid - defaulting to 45");
     step_degrees = 45;
   }
+  
+  delay_time = (delay_time * step_degrees) / 180;
+
+  sparki.print("delay_time: ");
+  sparki.println(delay_time);
+  sparki.updateLCD(); // put the drawings on the screen
 
   // start at 90 degrees left and check each step_degrees for 
   // the best path
   for (int angle = -90; angle <= 90; angle += step_degrees) {
+    
     sparki.servo(angle); // rotate the servo to next postion
-    delay(100); // wait 0.1 seconds (100 milliseconds)
+    delay(delay_time); // wait for servo to position
 
     // measures the distance with Sparki's eyes
     // and keep this angle if it's the best
@@ -45,11 +55,11 @@ void find_next_path(int step_degrees)
       best_distance = distance;
       best_angle = angle;
     }
-    sparki.print(angle);
-    sparki.print(" ");
-    sparki.updateLCD(); // put the drawings on the screen
+    // sparki.print(angle);
+    // sparki.print(" ");
+    // sparki.updateLCD(); // put the drawings on the screen
   }
-  sparki.println(" ");
+  // sparki.println(" ");
 
   // We found something. Re-center the eyes
   sparki.servo(SERVO_CENTER);
@@ -114,7 +124,7 @@ void loop()
       {
         sparki.println("I think I'm stuck! - finding another path");
         sparki.updateLCD(); // put the drawings on the screen
-        sparki.RGB(RGB_ORANGE); // turn the light orange
+        sparki.RGB(RGB_VIOLET); // turn the light orange
         sparki.beep(); // beep!
         sparki.moveBackward(min_distance / 2); // back up 10 centimeters
 
