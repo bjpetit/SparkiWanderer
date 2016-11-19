@@ -9,4 +9,4 @@ range finder to avoid colisions. Here's a basic overview of the program...
   - It has been too long since Sparki detected shrinking distance between it and an obstacle
 - When either condition is encountered, Sparki will look around and find another path forward by sampling range to an obstacle at different angles and picking the clearest path
 
-Not the second condition is intended to catch the situations where sparki has gotten stuck on an obstacle which was out of view of the ultrasonic range finder
+Note: the second condition is intended to catch the situations where sparki has gotten stuck on an obstacle which was out of view of the ultrasonic range finder
